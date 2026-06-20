@@ -1,32 +1,30 @@
 # elmira
 # This Python project, “Smart Expense Tracker,” analyzes user expenses by category. It calculates total spending, category-wise distribution, and identifies the highest expense area. The project helps develop skills in data analysis, data structuring, and basic programming for real-world financial insights.
-expenses = [
-    {"category": "food", "amount": 12},
-    {"category": "transport", "amount": 5},
-    {"category": "food", "amount": 20},
-    {"category": "study", "amount": 15},
-    {"category": "transport", "amount": 10}
-]
+from collections import defaultdict
+
+expenses = []
+n = int(input("How many expenses? "))
+for i in range(n):
+    category = input("Enter category: ")
+    try:
+        amount = float(input("Enter amount: "))
+    except ValueError:
+        print("Invalid amount, skipping this entry.")
+        continue
+    expenses.append({"category": category, "amount": amount})
 
 total = 0
-category_sum = {}
-
+category_sum = defaultdict(float)
 for item in expenses:
-    amount = item["amount"]
-    category = item["category"]
+    total += item["amount"]
+    category_sum[item["category"]] += item["amount"]
 
-    total += amount
-
-    if category in category_sum:
-        category_sum[category] += amount
-    else:
-        category_sum[category] = amount
-
-print("Total expenses:", total)
-
-print("\nExpenses by category:")
+print(f"\nTotal expenses: {total:.2f}")
+print("\nBy category:")
 for cat, val in category_sum.items():
-    print(cat, ":", val)
+    print(f"{cat} : {val:.2f}")
 
-most_expensive_category = max(category_sum, key=category_sum.get)
-print("\nMost expensive category:", most_expensive_category)
+if category_sum:
+    print("\nMost expensive category:", max(category_sum, key=category_sum.get))
+else:
+    print("\nNo expenses recorded.")
